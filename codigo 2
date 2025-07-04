@@ -1,0 +1,90 @@
+# Sistema simples de login e cadastro
+
+usuarios = []
+
+def cadastrar_usuario():
+    print("\n--- CADASTRO ---")
+    nome = input("Digite seu nome: ")
+    email = input("Digite seu email: ")
+    senha = input("Digite sua senha: ")
+    
+    # Verifica se o email já existe
+    for usuario in usuarios:
+        if usuario["email"] == email:
+            print("Este email já está cadastrado!")
+            return None
+    
+    novo_usuario = {
+        "nome": nome,
+        "email": email,
+        "senha": senha  # Na prática, armazenaria um hash da senha
+    }
+    
+    usuarios.append(novo_usuario)
+    print("Cadastro realizado com sucesso!")
+    return novo_usuario
+
+def fazer_login():
+    print("\n--- LOGIN ---")
+    email = input("Email: ")
+    senha = input("Senha: ")
+    
+    for usuario in usuarios:
+        if usuario["email"] == email and usuario["senha"] == senha:
+            print(f"Bem-vindo, {usuario['nome']}!")
+            return usuario
+    
+    print("Email ou senha incorretos!")
+    return None
+
+def menu_principal():
+    print("\n=== SISTEMA DE DENÚNCIAS URBANAS ===")
+    print("1. Cadastrar")
+    print("2. Login")
+    print("3. Sair")
+    
+    try:
+        opcao = int(input("Escolha uma opção: "))
+        return opcao
+    except:
+        print("Digite um número válido!")
+        return None
+
+def area_logada(usuario):
+    print(f"\nOlá {usuario['nome']}! Você está logado.")
+    # Aqui você pode chamar as funções do sistema de denúncias
+    print("1. Fazer denúncia")
+    print("2. Ver minhas denúncias")
+    print("3. Sair")
+    
+    opcao = input("Escolha uma opção: ")
+    return opcao
+
+def main():
+    # Usuário teste para facilitar
+    usuarios.append({
+        "nome": "Admin",
+        "email": "admin@exemplo.com",
+        "senha": "123456"
+    })
+    
+    while True:
+        opcao = menu_principal()
+        
+        if opcao == 1:
+            cadastrar_usuario()
+        elif opcao == 2:
+            usuario = fazer_login()
+            if usuario:
+                while True:
+                    opcao_logado = area_logada(usuario)
+                    if opcao_logado == "3":
+                        break
+        elif opcao == 3:
+            print("Obrigado por usar nosso sistema!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+if __name__ == "__main__":
+    main()
