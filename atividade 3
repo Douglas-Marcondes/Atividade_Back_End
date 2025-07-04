@@ -1,0 +1,90 @@
+# Sistema de Suporte Técnico Simples
+
+chamados = []
+usuarios = []
+
+def menu_principal():
+    print("\n=== SISTEMA DE SUPORTE TÉCNICO ===")
+    print("1. Cadastrar usuário")
+    print("2. Abrir chamado")
+    print("3. Listar chamados")
+    print("4. Sair")
+    opcao = input("Escolha uma opção: ")
+    return opcao
+
+def cadastrar_usuario():
+    print("\n--- CADASTRO DE USUÁRIO ---")
+    nome = input("Nome: ")
+    email = input("Email: ")
+    
+    # Verifica se email já existe
+    for usuario in usuarios:
+        if usuario['email'] == email:
+            print("Este email já está cadastrado!")
+            return None
+    
+    novo_usuario = {'nome': nome, 'email': email}
+    usuarios.append(novo_usuario)
+    print("Usuário cadastrado com sucesso!")
+    return novo_usuario
+
+def abrir_chamado(usuario):
+    print("\n--- ABRIR CHAMADO ---")
+    assunto = input("Assunto: ")
+    descricao = input("Descrição do problema: ")
+    
+    novo_chamado = {
+        'id': len(chamados) + 1,
+        'assunto': assunto,
+        'descricao': descricao,
+        'usuario': usuario['email'],
+        'status': 'Aberto'
+    }
+    
+    chamados.append(novo_chamado)
+    print(f"Chamado #{novo_chamado['id']} aberto com sucesso!")
+    return novo_chamado
+
+def listar_chamados():
+    print("\n--- CHAMADOS ABERTOS ---")
+    if not chamados:
+        print("Nenhum chamado aberto.")
+        return
+    
+    for chamado in chamados:
+        print(f"\nID: {chamado['id']}")
+        print(f"Assunto: {chamado['assunto']}")
+        print(f"Status: {chamado['status']}")
+        print(f"Usuário: {chamado['usuario']}")
+        print(f"Descrição: {chamado['descricao']}")
+
+def main():
+    print("Bem-vindo ao Sistema de Suporte Técnico")
+    
+    # Usuário padrão para teste
+    usuarios.append({'nome': 'Suporte', 'email': 'suporte@empresa.com'})
+    
+    usuario_atual = None
+    
+    while True:
+        opcao = menu_principal()
+        
+        if opcao == '1':
+            usuario_atual = cadastrar_usuario()
+        elif opcao == '2':
+            if not usuario_atual:
+                print("\nVocê precisa cadastrar um usuário primeiro.")
+                usuario_atual = cadastrar_usuario()
+                if not usuario_atual:
+                    continue
+            abrir_chamado(usuario_atual)
+        elif opcao == '3':
+            listar_chamados()
+        elif opcao == '4':
+            print("Obrigado por usar nosso sistema!")
+            break
+        else:
+            print("Opção inválida. Tente novamente.")
+
+if __name__ == "__main__":
+    main()
